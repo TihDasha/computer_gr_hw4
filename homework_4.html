@@ -1,0 +1,68 @@
+<HTML>
+<BODY>
+<canvas id="homework_4" width="500" height="400">
+</canvas>
+<script>
+  var canvas = document.getElementById("homework_4");
+  var ctx = canvas.getContext("2d");
+
+ var plot = function(x, y, c) {
+      if(isFinite(x) && isFinite(y)){
+          var color = {
+              r: plot.color.r,
+              g: plot.color.g,
+              b: plot.color.b,
+              a: plot.color.a*c
+          };
+
+          setPixel(x,y, color);
+      }
+  };
+
+  function setPixel (x,y,c) {
+      var p = ctx.createImageData(1,1);
+      p.data[0]=c.r;
+      p.data[1]=c.g;
+      p.data[2]=c.b;
+      p.data[3]=c.a;
+      var data = ctx.getImageData(x, y, 1,1).data;
+      ctx.putImageData(p,x,y);
+  }
+
+
+  function drawCircle(x,y, radius, color){
+      if(color)  {
+          plot.color = color;
+      } else {
+          plot.color = {r:0,g:0,b:0,a:255};
+      }
+      var x0 = 0, y0 = radius, gap = 0, delta = (2 - 2 * radius);
+      while (y0 >= 0)
+      {
+          plot(x + x0, y - y0, 1);
+          plot(x - x0, y - y0, 1);
+          plot(x - x0, y + y0, 1);
+          plot(x + x0, y + y0, 1);
+          gap = 2 * (delta + y0) - 1;
+          if (delta < 0 && gap <= 0)
+          {
+              x0++;
+              delta += 2 * x0 + 1;
+              continue;
+          }
+          if (delta > 0 && gap > 0)
+          {
+              y0--;
+              delta -= 2 * y0 + 1;
+              continue;
+          }
+          x0++;
+          delta += 2 * (x0 - y0);
+          y0--;
+      }
+  }
+
+    drawCircle(300, 300, 100);
+</script>
+</BODY>
+</HTML>
